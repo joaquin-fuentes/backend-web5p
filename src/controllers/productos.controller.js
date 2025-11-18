@@ -6,31 +6,31 @@ import {
   obtenerProductosServicio,
 } from "../services/productos.service.js";
 
-export const obtenerProductosController = (req, res) => {
-  const { json, statusCode } = obtenerProductosServicio();
+export const obtenerProductosController = async (req, res) => {
+  const { json, statusCode } = await obtenerProductosServicio();
   res.status(statusCode).json(json);
 };
 
-export const obtenerProductoPorIdController = (req, res) => {
-  const id = Number(req.params.id);
-  const { json, statusCode } = obtenerProductoPorIdServicio(id);
+export const obtenerProductoPorIdController = async (req, res) => {
+  const id = req.params.id;
+  const { json, statusCode } = await obtenerProductoPorIdServicio(id);
   res.status(statusCode).json(json);
 };
 
-export const crearProductoController = (req, res) => {
+export const crearProductoController = async (req, res) => {
   const nuevoProducto = req.body;
-  const { statusCode, json } = crearProductoServicio(nuevoProducto);
+  const { statusCode, json } = await crearProductoServicio(nuevoProducto);
   res.status(statusCode).json(json);
 };
 
-export const editarProductoController = (req, res) => {
-  const id = Number(req.params.id);
-  const { statusCode, json } = editarProductoServicio(id, req.body);
+export const editarProductoController = async (req, res) => {
+  const id = req.params.id;
+  const { statusCode, json } = await editarProductoServicio(id, req.body);
   res.status(statusCode).json(json);
 };
 
-export const eliminarProductoController = (req, res) => {
-  const id = Number(req.params.id);
-  const { statusCode, json } = eliminarProductoServicio(id);
+export const eliminarProductoController = async (req, res) => {
+  const id = req.params.id;
+  const { statusCode, json } = await eliminarProductoServicio(id);
   res.status(statusCode).json(json);
 };

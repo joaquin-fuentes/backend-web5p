@@ -1,23 +1,20 @@
-let productos = [
-  { nombre: "Coca cola 3L", precio: 4500, descripcion: "La más mejor", id: 20 },
-  { nombre: "Pepsi 3L", precio: 3000, descripcion: "La 2da más mejor", id: 7 },
-  { nombre: "Manaos", precio: 1200, descripcion: "La más peor", id: 33 },
-];
+import { ProductoModel } from "../models/producto.model.js";
 
-export const obtenerProductosServicio = () => {
+export const obtenerProductosServicio = async () => {
   // buscar los productos de la base de datos
+  const productosDB = await ProductoModel.find();
   return {
     json: {
       mensaje: "Datos encontrados con éxito",
-      datos: productos,
+      datos: productosDB,
     },
     statusCode: 200,
   };
 };
 
-export const obtenerProductoPorIdServicio = (id) => {
-  const producto = productos.find((producto) => producto.id === id);
-  if (!producto)
+export const obtenerProductoPorIdServicio = async (id) => {
+  const productoDB = await ProductoModel.findById(id);
+  if (!productoDB)
     return {
       json: {
         mensaje: "El producto no existe",
@@ -28,49 +25,44 @@ export const obtenerProductoPorIdServicio = (id) => {
   return {
     json: {
       mensaje: "Datos encontrados con éxito",
-      datos: producto,
+      datos: productoDB,
     },
     statusCode: 200,
   };
 };
 
-export const crearProductoServicio = (nuevoProducto) => {
-  nuevoProducto.id = Date.now();
-  productos.push(nuevoProducto);
+export const crearProductoServicio = async (nuevoProductoDesdeCliente) => {
+  const nuevoProductoDB = new ProductoModel(nuevoProductoDesdeCliente);
+  await nuevoProductoDB.save();
   return {
     json: {
       mensaje: "Producto creado con éxito",
-      datos: nuevoProducto,
+      datos: nuevoProductoDB,
     },
     statusCode: 202,
   };
 };
 
-export const editarProductoServicio = (id, body) => {
-  const posicion = productos.findIndex((producto) => producto.id === id);
-  if (posicion === -1)
-    return {
-      json: {
-        mensaje: "El producto no existe",
-        datos: null,
-      },
-      statusCode: 404,
-    };
-  productos[posicion] = { ...body, id };
+export const editarProductoServicio = async (id, body) => {
+  const productoActualizado = await ProductoModel.findByIdAndUpdate(id, body, {
+    new: true,
+    runValidators: true,
+  });
   return {
     json: {
       mensaje: "Producto editado con éxito",
-      datos: productos,
+      datos: productoActualizado,
     },
     statusCode: 202,
   };
 };
 
-export const eliminarProductoServicio = (id) => {
-  productos = productos.filter((producto) => producto.id !== id);
+export const eliminarProductoServicio = async (id) => {
+  const productoEliminado = await ProductoModel.findByIdAndDelete(id);
   return {
     json: {
       mensaje: "Producto eliminado con éxito",
+      productoEliminado,
     },
     statusCode: 200,
   };
