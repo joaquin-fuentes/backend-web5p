@@ -1,0 +1,11 @@
+Registro: 
+1- agregar el rol del usuario
+2- roles disponibles usuario, admin, vendedor
+3- guardar este usuario con su rol asignado
+
+Login:
+1- Recibir email y passowrd del usuario
+2- Validar que exista el email y el passowrd
+3- verificar el rol, y segun el rol mostrar  un msj distinto. Ejemplo "bienvenido usuario" 
+"Bienvenido administrador" o "Bienvenido vendedor" 
+4- Si el rol no es ninguno de esos, mostrar un msj de error generico
