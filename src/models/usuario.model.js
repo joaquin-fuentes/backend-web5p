@@ -12,7 +12,11 @@ const UsuarioSchema = new Schema(
         /^https?:\/\/[^\s\/$.?#].[^\s]*\.(?:jpg|png|webp|avif|svg)(?:\?.*)?(?:#.*)?$/i,
     },
     password: { type: String, required: true },
-    rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
+    rol: {
+      type: String,
+      enum: ["usuario", "admin", "vendedor"],
+      default: "usuario",
+    },
   },
   {
     timestamps: true,

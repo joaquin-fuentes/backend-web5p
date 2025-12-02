@@ -1,5 +1,6 @@
 import { UsuarioModel } from "../models/usuario.model.js";
 import argon from "argon2";
+import jwt from "jsonwebtoken";
 
 export const registroUsuarioServicio = async (datosUsuario) => {
   try {
@@ -21,13 +22,13 @@ export const registroUsuarioServicio = async (datosUsuario) => {
 export const loginUsuarioServicio = async (datosUsuario) => {
   try {
     const usuarioExistente = await UsuarioModel.findOne({
-      usuario: datosUsuario.usuario,
+      email: datosUsuario.email,
     });
     // preguntar si el usuario existe
     if (!usuarioExistente) {
       return {
         statusCode: 404,
-        json: { msg: "Usuario o Contrasenia incorrecto - USUARIO" },
+        json: { msg: "Email o Contrasenia incorrecto - USUARIO" },
       };
     }
     // comprobar la contraseña
@@ -38,16 +39,32 @@ export const loginUsuarioServicio = async (datosUsuario) => {
     if (!contraseniaOK) {
       return {
         statusCode: 404,
-        json: { msg: "Usuario o Contrasenia incorrecto - PASSWORD" },
+        json: { msg: "Email o Contrasenia incorrecto - PASSWORD" },
       };
     }
+    const rolValido = ["vendedor", "admin", "usuario"].includes(
+      usuarioExistente.rol
+    );
+
+    // devolver informacion al frontend
+    const payload = {
+      usuario: usuarioExistente.usuario,
+      email: usuarioExistente.email,
+      rol: usuarioExistente.rol,
+    };
+    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
 
     // devolver el dato del usuario existente
     return {
       statusCode: 201,
       json: {
-        msg: "Usuario Logueado con éxito",
-        usuarioLogueado: usuarioExistente,
+        msg: `Bienvenido ${
+          rolValido ? usuarioExistente.rol : "ROL DESCONOCIDO"
+        }`,
+        usuarioLogueado: payload,
+        token,
       },
     };
   } catch (error) {
