@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { rolesPermitidos } from "../const/roles.js";
 
 const { Schema } = mongoose;
 
@@ -14,7 +15,7 @@ const UsuarioSchema = new Schema(
     password: { type: String, required: true },
     rol: {
       type: String,
-      enum: ["usuario", "admin", "vendedor"],
+      enum: rolesPermitidos,
       default: "usuario",
     },
   },

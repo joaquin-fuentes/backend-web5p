@@ -1,6 +1,7 @@
 import { UsuarioModel } from "../models/usuario.model.js";
 import argon from "argon2";
 import jwt from "jsonwebtoken";
+import { rolesPermitidos } from "../const/roles.js";
 
 export const registroUsuarioServicio = async (datosUsuario) => {
   try {
@@ -42,9 +43,7 @@ export const loginUsuarioServicio = async (datosUsuario) => {
         json: { msg: "Email o Contrasenia incorrecto - PASSWORD" },
       };
     }
-    const rolValido = ["vendedor", "admin", "usuario"].includes(
-      usuarioExistente.rol
-    );
+    const rolValido = rolesPermitidos.includes(usuarioExistente.rol);
 
     // devolver informacion al frontend
     const payload = {
