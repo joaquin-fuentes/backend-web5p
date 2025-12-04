@@ -2,11 +2,17 @@ import { UsuarioModel } from "../models/usuario.model.js";
 import argon from "argon2";
 import jwt from "jsonwebtoken";
 import { rolesPermitidos } from "../const/roles.js";
+import { CarritoModel } from "../models/carrito.model.js";
 
 export const registroUsuarioServicio = async (datosUsuario) => {
   try {
     const nuevoUsuarioDB = new UsuarioModel(datosUsuario);
     nuevoUsuarioDB.password = await argon.hash(nuevoUsuarioDB.password);
+    // Crear el carrito
+    const nuevoCarrito = new CarritoModel({ idUsuario: nuevoUsuarioDB._id });
+    await nuevoCarrito.save();
+    // Guardar el id del carrito en el usuario
+    nuevoUsuarioDB.idCarrito = nuevoCarrito._id;
     await nuevoUsuarioDB.save();
     return {
       statusCode: 201,

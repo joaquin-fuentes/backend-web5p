@@ -18,6 +18,7 @@ const UsuarioSchema = new Schema(
       enum: rolesPermitidos,
       default: "usuario",
     },
+    idCarrito: { type: String },
   },
   {
     timestamps: true,
