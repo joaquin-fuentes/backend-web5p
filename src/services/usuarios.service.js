@@ -50,12 +50,14 @@ export const loginUsuarioServicio = async (datosUsuario) => {
       };
     }
     const rolValido = rolesPermitidos.includes(usuarioExistente.rol);
-
+    console.log(usuarioExistente);
     // devolver informacion al frontend
     const payload = {
       usuario: usuarioExistente.usuario,
       email: usuarioExistente.email,
       rol: usuarioExistente.rol,
+      idCarrito: usuarioExistente.idCarrito,
+      idUsuario: usuarioExistente._id,
     };
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: "1h",

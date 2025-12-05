@@ -11,12 +11,14 @@ export const validarToken = (req, res, next) => {
     // formatear el nombre del token para quitar la palabra "Bearer"
     const token = tokenCompleto.split(" ")[1];
     const usuarioInfoDecodificada = jwt.verify(token, process.env.SECRET_KEY);
-    console.log(usuarioInfoDecodificada.rol);
-    if (usuarioInfoDecodificada.rol === "admin") {
-      next();
-    } else {
-      return res.status(401).json({ msg: "Usuario NO AUTORIZADO" });
-    }
+    // if (usuarioInfoDecodificada.rol === "admin") {
+    //   next();
+    // } else {
+    //   return res.status(401).json({ msg: "Usuario NO AUTORIZADO" });
+    // }
+    req.idCarrito = usuarioInfoDecodificada.idCarrito;
+    req.idUsuario = usuarioInfoDecodificada.idUsuario;
+    next();
   } catch (error) {
     return res.status(401).json({ msg: "ERROR DE AUTORIZACION", error });
   }
