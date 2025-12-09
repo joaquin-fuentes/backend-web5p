@@ -1,9 +1,14 @@
 import { Router } from "express";
 import { validarToken } from "../middlewares/auth.middleware.js";
-import { agregarProductoCarrito } from "../controllers/carrito.controller.js";
+import {
+  agregarProductoCarrito,
+  eliminarProductoCarrito,
+  obtenerDatosCarrito,
+} from "../controllers/carrito.controller.js";
 
 const router = Router();
 
 router.post("/:id", validarToken, agregarProductoCarrito);
-
+router.delete("/:id", validarToken, eliminarProductoCarrito);
+router.get("/", validarToken, obtenerDatosCarrito);
 export default router;

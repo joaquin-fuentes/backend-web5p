@@ -46,3 +46,52 @@ export const agregarProductoServicio = async (
     };
   }
 };
+
+export const eliminarProductoServicio = async (
+  idCarrito,
+  idUsuario,
+  idProducto
+) => {
+  try {
+    const carrito = await CarritoModel.findById(idCarrito);
+    if (!carrito) throw new Error("Carrito no encontrado");
+    const indice = carrito.productos.findIndex(
+      (producto) => producto.idProducto.toString() === idProducto.toString()
+    );
+    if (indice === -1) throw new Error("Producto no encontrado en el carrito");
+    carrito.productos.splice(indice, 1);
+    await carrito.save();
+    //  obtener el id del producto que quiero eliminarProductoServicio, y el id del carrito
+    return {
+      json: { msg: "Producto eliminado correctamente" },
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      json: { msg: error.message },
+      statusCode: 400,
+    };
+  }
+};
+
+export const obtenerDatosCarritoServicio = async (req) => {
+  try {
+    const carrito = await CarritoModel.findById(req.idCarrito);
+    if (!carrito) throw new Error("Carrito no encontrado");
+    return {
+      json: {
+        msg: "Productos del carrito encontrados",
+        productos: carrito.productos,
+      },
+      statusCode: 200,
+    };
+  } catch (error) {
+    return {
+      json: {
+        msg: error.message,
+        productos: [],
+      },
+      statusCode: 400,
+    };
+  }
+};
