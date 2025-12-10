@@ -50,7 +50,6 @@ export const loginUsuarioServicio = async (datosUsuario) => {
       };
     }
     const rolValido = rolesPermitidos.includes(usuarioExistente.rol);
-    console.log(usuarioExistente);
     // devolver informacion al frontend
     const payload = {
       usuario: usuarioExistente.usuario,
